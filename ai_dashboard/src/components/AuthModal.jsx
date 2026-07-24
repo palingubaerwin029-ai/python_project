@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { X, Mail, Lock, User, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
