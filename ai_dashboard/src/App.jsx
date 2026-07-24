@@ -5,29 +5,50 @@ import OverviewAnalytics from './components/OverviewAnalytics';
 import AITaskOptimizer from './components/AITaskOptimizer';
 import FocusFlowState from './components/FocusFlowState';
 import AIInsightsFeed from './components/AIInsightsFeed';
+import AuthModal from './components/AuthModal';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [user, setUser] = useState({
+    name: 'Alex Morgan',
+    email: 'alex.morgan@company.com',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+  });
+
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
 
   const renderActiveModule = () => {
     switch (activeTab) {
       case 'overview':
-        return <OverviewAnalytics />;
+        return <OverviewAnalytics user={user} />;
       case 'optimizer':
-        return <AITaskOptimizer />;
+        return <AITaskOptimizer user={user} />;
       case 'focus':
-        return <FocusFlowState />;
+        return <FocusFlowState user={user} />;
       case 'insights':
-        return <AIInsightsFeed />;
+        return <AIInsightsFeed user={user} />;
       default:
-        return <OverviewAnalytics />;
+        return <OverviewAnalytics user={user} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Top Navbar */}
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        user={user}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        onLogout={handleLogout}
+      />
 
       {/* Main Content Area */}
       <div className="flex flex-1">
@@ -61,6 +82,13 @@ export default function App() {
           {renderActiveModule()}
         </main>
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </div>
   );
 }

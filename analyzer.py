@@ -219,6 +219,7 @@ def generate_ai_insights(resume_text: str, jd_text: str, skill_gap: Dict[str, An
     
     if effective_api_key:
         try:
+            # pyrefly: ignore [missing-import]
             from google import genai
             client = genai.Client(api_key=effective_api_key)
             prompt = f"""

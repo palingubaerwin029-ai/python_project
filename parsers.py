@@ -6,6 +6,7 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
     """Extract text from a PDF file using pypdf or fallback."""
     text = ""
     try:
+        # pyrefly: ignore [missing-import]
         import pypdf
         reader = pypdf.PdfReader(io.BytesIO(file_bytes))
         for page in reader.pages:
@@ -25,6 +26,7 @@ def extract_text_from_docx(file_bytes: bytes) -> str:
     """Extract text from a DOCX file using python-docx."""
     text = ""
     try:
+        # pyrefly: ignore [missing-import]
         import docx
         doc = docx.Document(io.BytesIO(file_bytes))
         paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]

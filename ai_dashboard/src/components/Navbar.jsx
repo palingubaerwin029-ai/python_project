@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Sparkles, Activity, Bell, Search, User, ShieldCheck, Zap } from 'lucide-react';
+import { Sparkles, Activity, Bell, Search, User, ShieldCheck, Zap, LogIn, LogOut } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab }) {
+export default function Navbar({ activeTab, setActiveTab, user, onOpenAuthModal, onLogout }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-6 py-3.5 flex items-center justify-between">
@@ -86,13 +87,52 @@ export default function Navbar({ activeTab, setActiveTab }) {
           )}
         </div>
 
-        {/* User Profile */}
-        <div className="flex items-center space-x-3 pl-2 border-l border-slate-800">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-0.5 cursor-pointer">
-            <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
-              <User className="w-4 h-4 text-slate-200" />
+        {/* User Profile / Auth Action */}
+        <div className="relative pl-2 border-l border-slate-800">
+          {user ? (
+            <div>
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="flex items-center space-x-2.5 p-1 rounded-xl hover:bg-slate-900 transition-colors"
+              >
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-0.5">
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="w-full h-full object-cover rounded-[10px]"
+                  />
+                </div>
+                <div className="text-left hidden xl:block">
+                  <p className="text-xs font-semibold text-white leading-none">{user.name}</p>
+                  <p className="text-[10px] text-slate-400 leading-none mt-1">{user.email}</p>
+                </div>
+              </button>
+
+              {userDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 glass-panel rounded-2xl p-2 shadow-2xl border border-slate-800 z-50 animate-in fade-in">
+                  <div className="p-3 border-b border-slate-800">
+                    <p className="text-xs font-semibold text-white">{user.name}</p>
+                    <p className="text-[11px] text-slate-400">{user.email}</p>
+                  </div>
+                  <button
+                    onClick={() => { setUserDropdownOpen(false); onLogout(); }}
+                    className="w-full mt-1 flex items-center space-x-2 px-3 py-2 text-xs text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors font-medium"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
+          ) : (
+            <button
+              onClick={onOpenAuthModal}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/20 flex items-center space-x-2 transition-all"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Sign In / Register</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

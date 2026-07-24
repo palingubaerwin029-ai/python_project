@@ -2,11 +2,15 @@ import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# pyrefly: ignore [missing-import]
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+# pyrefly: ignore [missing-import]
 from fastapi.staticfiles import StaticFiles
+# pyrefly: ignore [missing-import]
 from fastapi.responses import HTMLResponse, JSONResponse
 from typing import Optional
 
+# pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
 
 from parsers import parse_resume_document
@@ -170,5 +174,6 @@ async def root():
     return HTMLResponse(content="<h1>AI Resume Analyzer Backend API is running!</h1>")
 
 if __name__ == "__main__":
+    # pyrefly: ignore [missing-import]
     import uvicorn
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
